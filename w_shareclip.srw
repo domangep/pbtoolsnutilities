@@ -3,6 +3,8 @@ $PBExportComments$PowerScript Clip Share GUI
 forward
 global type w_shareclip from window
 end type
+type cbx_keyboardshortcuts from checkbox within w_shareclip
+end type
 type ddlb_1 from dropdownlistbox within w_shareclip
 end type
 type rb_pk from radiobutton within w_shareclip
@@ -33,13 +35,14 @@ end forward
 
 global type w_shareclip from window
 integer width = 1925
-integer height = 1612
+integer height = 1712
 boolean titlebar = true
 string title = "PowerScript Clip Sharing Tool"
 boolean controlmenu = true
 long backcolor = 67108864
 string icon = "AppIcon!"
 boolean center = true
+cbx_keyboardshortcuts cbx_keyboardshortcuts
 ddlb_1 ddlb_1
 rb_pk rb_pk
 rb_pb rb_pb
@@ -66,10 +69,10 @@ n_cst_shareclip	inv_sc
 
 Integer	ii_mode = cst_mode_export
 integer	ii_product = inv_sc.cst_ide_powerbuilder
+Boolean	ib_KeyboardShortcuts = false
 
 
 end variables
-
 forward prototypes
 public subroutine of_populate_product_version ()
 end prototypes
@@ -114,6 +117,7 @@ ddlb_1.setfocus( )
 end subroutine
 
 on w_shareclip.create
+this.cbx_keyboardshortcuts=create cbx_keyboardshortcuts
 this.ddlb_1=create ddlb_1
 this.rb_pk=create rb_pk
 this.rb_pb=create rb_pb
@@ -127,7 +131,8 @@ this.gb_2=create gb_2
 this.gb_3=create gb_3
 this.ln_1=create ln_1
 this.ln_2=create ln_2
-this.Control[]={this.ddlb_1,&
+this.Control[]={this.cbx_keyboardshortcuts,&
+this.ddlb_1,&
 this.rb_pk,&
 this.rb_pb,&
 this.st_copyright,&
@@ -143,6 +148,7 @@ this.ln_2}
 end on
 
 on w_shareclip.destroy
+destroy(this.cbx_keyboardshortcuts)
 destroy(this.ddlb_1)
 destroy(this.rb_pk)
 destroy(this.rb_pb)
@@ -161,9 +167,28 @@ end on
 event open;of_populate_product_version( )
 end event
 
+type cbx_keyboardshortcuts from checkbox within w_shareclip
+integer x = 146
+integer y = 424
+integer width = 1216
+integer height = 80
+integer textsize = -10
+integer weight = 400
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "Arial"
+long textcolor = 33554432
+long backcolor = 67108864
+string text = "I also want to include Keyboard Shortcuts"
+end type
+
+event clicked;ib_keyboardshortcuts = this.checked
+end event
+
 type ddlb_1 from dropdownlistbox within w_shareclip
 integer x = 123
-integer y = 1028
+integer y = 1144
 integer width = 983
 integer height = 400
 integer taborder = 40
@@ -179,7 +204,7 @@ end type
 
 type rb_pk from radiobutton within w_shareclip
 integer x = 123
-integer y = 712
+integer y = 828
 integer width = 1659
 integer height = 80
 integer textsize = -10
@@ -213,7 +238,7 @@ end event
 
 type rb_pb from radiobutton within w_shareclip
 integer x = 123
-integer y = 608
+integer y = 724
 integer width = 1623
 integer height = 80
 integer textsize = -10
@@ -248,7 +273,7 @@ end event
 
 type st_copyright from statictext within w_shareclip
 integer x = 32
-integer y = 1392
+integer y = 1508
 integer width = 974
 integer height = 64
 integer textsize = -10
@@ -260,14 +285,14 @@ string facename = "Arial"
 boolean italic = true
 long textcolor = 33554432
 long backcolor = 67108864
-string text = "Copyright $$HEX2$$a9002000$$ENDHEX$$2008 dP Software "
+string text = "Copyright $$HEX2$$a9002000$$ENDHEX$$2014 dP Software "
 alignment alignment = center!
 boolean focusrectangle = false
 end type
 
 type cb_close from commandbutton within w_shareclip
 integer x = 1472
-integer y = 1372
+integer y = 1488
 integer width = 402
 integer height = 112
 integer taborder = 30
@@ -286,7 +311,7 @@ end event
 
 type cb_apply from commandbutton within w_shareclip
 integer x = 1038
-integer y = 1372
+integer y = 1488
 integer width = 402
 integer height = 112
 integer taborder = 20
@@ -302,7 +327,7 @@ end type
 
 event clicked;integer 	li_rc
 string  	ls_filename
-string	ls_version
+string		ls_version
 
 li_rc = inv_sc.of_setfilename( )
 
@@ -314,8 +339,14 @@ ls_version = ddlb_1.text
 choose case ii_mode
 	case 1
 		inv_sc.of_exportclip( ls_filename, ls_version, ii_product )
+		if ib_keyboardshortcuts = true then
+			inv_sc.of_exportkeyboardshortcuts( ls_filename, ls_version, ii_product )
+		end if
 	case 2
 		inv_sc.of_importclip( ls_filename, ls_version, ii_product )
+		if ib_keyboardshortcuts = true then
+			inv_sc.of_importkeyboardshortcuts( ls_filename, ls_version, ii_product )
+		end if
 end choose
 
 end event
@@ -390,7 +421,7 @@ type gb_1 from groupbox within w_shareclip
 integer x = 37
 integer y = 60
 integer width = 1838
-integer height = 400
+integer height = 520
 integer taborder = 10
 integer textsize = -10
 integer weight = 700
@@ -405,7 +436,7 @@ end type
 
 type gb_2 from groupbox within w_shareclip
 integer x = 37
-integer y = 480
+integer y = 596
 integer width = 1838
 integer height = 400
 integer taborder = 20
@@ -422,7 +453,7 @@ end type
 
 type gb_3 from groupbox within w_shareclip
 integer x = 37
-integer y = 900
+integer y = 1016
 integer width = 1838
 integer height = 324
 integer taborder = 30
@@ -441,17 +472,17 @@ type ln_1 from line within w_shareclip
 long linecolor = 16777215
 integer linethickness = 4
 integer beginx = 27
-integer beginy = 1312
+integer beginy = 1428
 integer endx = 1902
-integer endy = 1312
+integer endy = 1428
 end type
 
 type ln_2 from line within w_shareclip
 long linecolor = 8421504
 integer linethickness = 4
 integer beginx = 27
-integer beginy = 1308
+integer beginy = 1424
 integer endx = 1902
-integer endy = 1308
+integer endy = 1424
 end type
 

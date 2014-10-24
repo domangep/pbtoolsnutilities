@@ -29,6 +29,8 @@ public subroutine of_getavailableideversion (integer ai_idetype, ref string as_v
 public function integer of_importclip (string as_filename, string as_ideversion, integer ai_idetype)
 public subroutine of_exportclip (string as_filename, string as_ideversion, integer ai_idetype)
 public function boolean of_iscompatibleversion (string as_version)
+public subroutine of_exportkeyboardshortcuts (string as_filename, string as_ideversion, integer ai_idetype)
+public function integer of_importkeyboardshortcuts (string as_filename, string as_ideversion, integer ai_idetype)
 end prototypes
 
 public function integer of_createfile (string as_filename);/********************************************************************
@@ -303,6 +305,93 @@ end if
 li_majorVersion = integer( as_version )
 
 return (li_majorVersion > 7)
+end function
+
+public subroutine of_exportkeyboardshortcuts (string as_filename, string as_ideversion, integer ai_idetype);/********************************************************************
+	of_exportkeyboardshortcuts
+
+	<DESC>	Export Keyboard Shortcuts of the specified IDE's Version
+				into the specified .REG File and link it to the .INI file.</DESC>
+
+	<RETURN> (none):
+				</RETURN>
+
+	<ACCESS> Public
+
+	<ARGS>	as_filename: The .REG filename that will contains the exported
+				Keyboard shortcuts information. It will have the same name than the main .INI file.
+				as_ideversion: The source IDE's version number to exports its
+				keyboard shortcuts
+				ai_idetype: The symbolic constant value of the source IDE,
+				where :
+				CST_IDE_POWERBUILDER (1) = PowerBuilder
+				CST_IDE_POCKETBUILDER (2) = PocketBuilder
+				</ARGS>
+
+	<USAGE>	Call this method to share keyboard shortcuts</USAGE>
+
+********************************************************************/
+
+string 	ls_regentry
+string		ls_filename
+string		ls_run
+integer	li_Rc
+
+// set .REG filename to match .INI file
+ls_filename = left( as_filename, len( as_filename ) - 3 )+ "reg"
+
+// Set registry entry name according to specified IDE version
+ls_regentry = is_regentryclip[ai_idetype]+"\"+as_ideversion+"\Shortcuts"
+
+// Export Keyboard shortcuts
+ls_run = "reg.exe export "+ ls_regentry + " " + ls_filename 
+li_rc = run( ls_run )
+
+// Store Keyboard Shortcuts .REG file reference into .INI file with a relative file path
+ls_filename = "."+mid( ls_filename, lastpos( ls_filename, "\") )
+SetprofileString( as_filename, "Settings", "KeyboardShortcuts", ls_filename)
+
+end subroutine
+
+public function integer of_importkeyboardshortcuts (string as_filename, string as_ideversion, integer ai_idetype);/********************************************************************
+	of_importKeyboard SHortcuts
+
+	<DESC>	Import shared PowerScript Keyboard SHortcuts from the specified .INI
+				file for the specified IDE 's version.</DESC>
+
+	<RETURN> integer:
+				 1, ok
+				 0, nothing done
+				-1, an error occurs</RETURN>
+
+	<ACCESS> Public
+
+	<ARGS>	as_filename: The filename of the .ini files that containts
+				PowerScript Keyboard SHortcuts informatin to be imported
+				as_ideversion: The destination version number of the specified
+				IDE
+				ai_idetype: The symbolic constant value for the destination
+				IDE, where
+				CST_IDE_POWERBUILDER (1) = PowerBuilder
+				CST_IDE_POCKETBUILDER (2) = PocketBuilder
+				</ARGS>
+
+	<USAGE>	Call this method to import shared powerscript Keyboard SHortcuts</USAGE>
+
+********************************************************************/
+
+string	ls_run
+string ls_regfile
+
+// Get linked .REG file that contains the Keyboard Shortcuts information to be imported
+ls_regfile = left( as_filename, lastpos( as_filename, "\") ) + mid( Profilestring( as_filename, "Settings","KeyboardShortcuts", "" ), 3)
+if ls_regfile ="" then return -1
+
+// Import .REG file using regedit tool
+ls_run = "reg.exe import "+ ls_regfile
+run( ls_run)
+
+return 1
 end function
 
 on n_cst_shareclip.create

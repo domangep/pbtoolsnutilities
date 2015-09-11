@@ -10,6 +10,7 @@ end type
 forward prototypes
 public function integer of_insert_menu_at_end (menu am_parent_menu, menu am_menu)
 public function integer of_insert_menu (menu am_parent_menu, integer ai_index, menu am_menu, boolean ab_shift)
+public function integer of_refresh_menu (menu am_menu)
 end prototypes
 
 public function integer of_insert_menu_at_end (menu am_parent_menu, menu am_menu);//////////////////////////////////////////////////////////////////////////////
@@ -80,6 +81,8 @@ public function integer of_insert_menu (menu am_parent_menu, integer ai_index, m
 //
 // Version
 // V1.0	PDO	10/09/2015	Initial version
+// V1.1	PDO	11/09/2015	Do not refresh parent menu automatically 
+//									- See of_refresh_menu method
 //////////////////////////////////////////////////////////////////////////////
 
 integer	li_i
@@ -114,13 +117,45 @@ end if
 // Insert dynamic menu at adequate position
 am_parent_menu.Item[ai_index] = am_menu
 
-// Refresh content of Parent menu
-hide(am_parent_menu)
-show(am_parent_menu)
-
 // Return the insertion index used
 return ai_index
 
+end function
+
+public function integer of_refresh_menu (menu am_menu);//////////////////////////////////////////////////////////////////////////////
+//
+// Function:		of_refresh_menu
+//
+// Access:			Public
+//
+// Arguments:
+// am_menu:		The Parent Menu to refresh it's contents
+//
+// Returns:			integer
+//						 1, OK
+//						-1, An error occurs
+//						
+//
+// Description:	Refresh content of the specified menu in order to make
+//						newly inserted sub item menus visible.
+//
+// Usage:			Call this method to refresh specified menu after having
+//							inserted all needed sub menu items needed.
+//
+//////////////////////////////////////////////////////////////////////////////
+//
+// Revision History
+//
+// Version
+// V1.0	PDO	11/09/2015	Initial version
+//////////////////////////////////////////////////////////////////////////////
+
+if isnull( am_menu ) or not isvalid( am_menu ) then return -1
+
+hide(am_menu)
+show(am_menu)
+
+return 1
 end function
 
 on n_dynamic_menu.create
@@ -154,6 +189,8 @@ event constructor;//////////////////////////////////////////////////////////////
 //						adequates properties
 //						4. Call the of_insert_menu() or of_insert_menu_at_end() as
 //						described in the documentation. (See function code)
+//						5. Refresh parent menu contents to make all new menu items visible at once
+//						    by calling the of_refresh_menu() method.
 //
 //						And thats all folks !!!
 //
@@ -163,6 +200,7 @@ event constructor;//////////////////////////////////////////////////////////////
 //
 // Version
 // V1.0	Patrice Domange	10/09/2015	Initial version
+// V1.1	Patrice Domange	11/09/2015	Add reference to the of_refresh_menu() method
 //////////////////////////////////////////////////////////////////////////////
 
 end event

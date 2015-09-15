@@ -3,5 +3,5 @@ Save Format v3.0(19990112)
 @end;
 appname "debug";
 applib "debug.pbl";
-LibList "debug.pbl;debug_.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfcapsrv.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfcdwsrv.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfcmain.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfcutil.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfcwnsrv.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfeapsrv.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfedwsrv.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfemain.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfeutil.pbl;..\\..\\..\\PB125\\CodePlex\\PFC\\12.5\\APPLIB\\pfewnsrv.pbl;C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder\\pbdom126.pbd";
+LibList "debug.pbl;debug_.pbl;..\\..\\PFC12.5\\pfcapsrv.pbl;..\\..\\PFC12.5\\pfcdwsrv.pbl;..\\..\\PFC12.5\\pfcmain.pbl;..\\..\\PFC12.5\\pfcutil.pbl;..\\..\\PFC12.5\\pfcwnsrv.pbl;..\\..\\PFC12.5\\pfeapsrv.pbl;..\\..\\PFC12.5\\pfedwsrv.pbl;..\\..\\PFC12.5\\pfemain.pbl;..\\..\\PFC12.5\\pfeutil.pbl;..\\..\\PFC12.5\\pfewnsrv.pbl;C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder\\pbdom125.pbd";
 type "pb";

@@ -1,0 +1,11 @@
+Save Format v3.0(19990112)
+@begin Libraries
+ "wizard.pbl" "";
+@end;
+@begin Objects
+ "u_step_1.sru" "wizard.pbl";
+ "u_step_2.sru" "wizard.pbl";
+ "u_step_3.sru" "wizard.pbl";
+ "w_wizard_test.srw" "wizard.pbl";
+ "wizard.sra" "wizard.pbl";
+@end;
